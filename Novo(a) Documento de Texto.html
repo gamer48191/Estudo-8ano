@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Equações do 2º Grau</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .quiz {
+            display: block;
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .question h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #00ffff;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .option input {
+            display: none;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .option input:checked + label {
+            color: #32cd32;
+            font-weight: bold;
+        }
+
+        #submit {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 126, 95, 0.5);
+        }
+
+        #submit:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 126, 95, 0.7);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .results h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 206, 162, 0.5);
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(67, 206, 162, 0.7);
+        }
+
+        .explanations {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .explanation {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .explanation h4 {
+            color: #ff69b4;
+        }
+
+        .explanation p {
+            text-align: left;
+        }
+
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration i {
+            font-size: 2em;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        .dec1 { top: 10%; left: 5%; }
+        .dec2 { top: 20%; right: 5%; }
+        .dec3 { bottom: 10%; left: 10%; }
+        .dec4 { bottom: 20%; right: 10%; }
+    </style>
+</head>
+<body>
+    <div class="decoration dec1"><i class="fas fa-square-root-alt"></i></div>
+    <div class="decoration dec2"><i class="fas fa-calculator"></i></div>
+    <div class="decoration dec3"><i class="fas fa-chart-line"></i></div>
+    <div class="decoration dec4"><i class="fas fa-superscript"></i></div>
+
+    <div class="container">
+        <h1>Quiz de Equações do 2º Grau</h1>
+        <p>Teste seus conhecimentos sobre equações de 2º Grau! Resolva as raízes das equações abaixo, Feito por Cunha.</p>
+        <div class="quiz" id="quiz"></div>
+        <button id="submit">Terminei</button>
+        <div class="results" id="results">
+            <h2>Você acertou <span id="score"></span> de 10 questões!</h2>
+            <button class="btn" id="explain">Explicar Respostas</button>
+            <button class="btn" id="restart">Reiniciar com Novas Questões</button>
+            <div class="explanations" id="explanations"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            generateQuiz();
+            // Renderizar equações após carregar o DOM
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\(", right: "\\)", display: false }
+                ],
+                throwOnError: false
+            });
+        });
+
+        let questions = [];
+        let userAnswers = [];
+        let correctAnswers = [];
+
+        function generateQuiz() {
+            questions = [];
+            userAnswers = Array(10).fill(null);
+            correctAnswers = [];
+            const quizDiv = document.getElementById('quiz');
+            quizDiv.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                let valid = false;
+                let attempts = 0;
+                let a, b, c, disc, root1, root2, eq, correct;
+
+                // Garantir equações com raízes reais e racionais
+                while (!valid && attempts < 100) {
+                    a = Math.floor(Math.random() * 5) + 1; // 1 to 5
+                    b = Math.floor(Math.random() * 21) - 10; // -10 to 10
+                    c = Math.floor(Math.random() * 21) - 10; // -10 to 10
+                    disc = b * b - 4 * a * c;
+                    if (disc >= 0 && Number.isInteger(Math.sqrt(disc))) {
+                        const sqrtDisc = Math.sqrt(disc);
+                        root1 = (-b + sqrtDisc) / (2 * a);
+                        root2 = (-b - sqrtDisc) / (2 * a);
+                        if (Number.isFinite(root1) && Number.isFinite(root2) && Number.isInteger(root1) && Number.isInteger(root2)) {
+                            valid = true;
+                        }
+                    }
+                    attempts++;
+                }
+
+                if (!valid) {
+                    // Fallback para uma equação válida
+                    a = 1; b = 0; c = -4; // x^2 - 4 = 0
+                    root1 = 2; root2 = -2;
+                    disc = 16;
+                }
+
+                // Formatar a equação
+                eq = `${a === 1 ? '' : a}x^2 ${b >= 0 ? '+' : ''}${b}x ${c >= 0 ? '+' : ''}${c} = 0`;
+                correct = `x = ${root1}, x = ${root2}`;
+                correctAnswers.push(correct);
+
+                // Gerar opções incorretas únicas
+                const options = [correct];
+                const usedOptions = new Set([correct]);
+                for (let j = 0; j < 3; j++) {
+                    let wrong1, wrong2, wrongOpt;
+                    do {
+                        wrong1 = root1 + Math.floor(Math.random() * 5) - 2;
+                        wrong2 = root2 + Math.floor(Math.random() * 5) - 2;
+                        wrongOpt = `x = ${wrong1}, x = ${wrong2}`;
+                    } while (usedOptions.has(wrongOpt) || (wrong1 === root1 && wrong2 === root2));
+                    options.push(wrongOpt);
+                    usedOptions.add(wrongOpt);
+                }
+                shuffle(options);
+
+                // Criar div da questão com numeração correta
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<h3>Questão ${i + 1}: Resolva \\(${eq}\\)</h3><div class="options"></div>`;
+                const optionsDiv = questionDiv.querySelector('.options');
+
+                options.forEach((opt, idx) => {
+                    const id = `q${i}o${idx}`;
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.innerHTML = `
+                        <input type="radio" id="${id}" name="q${i}" value="${opt}">
+                        <label for="${id}" class="option-label">\\(${opt}\\)</label>
+                    `;
+                    optionsDiv.appendChild(optionDiv);
+                    // Adicionar evento de clique ao label para garantir seleção
+                    const label = optionDiv.querySelector('label');
+                    label.addEventListener('click', () => {
+                        document.getElementById(id).checked = true;
+                    });
+                });
+
+                quizDiv.appendChild(questionDiv);
+                questions.push({ eq, correct, options, a, b, c, disc });
+                // Renderizar equações após adicionar cada questão
+                renderMathInElement(questionDiv);
+            }
+
+            // Renderizar novamente todo o quiz para garantir consistência
+            renderMathInElement(quizDiv);
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        document.getElementById('submit').addEventListener('click', () => {
+            let score = 0;
+            for (let i = 0; i < 10; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                userAnswers[i] = selected ? selected.value : null;
+                if (userAnswers[i] === correctAnswers[i]) score++;
+            }
+            document.getElementById('score').textContent = score;
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('submit').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+        });
+
+        document.getElementById('explain').addEventListener('click', () => {
+            const expDiv = document.getElementById('explanations');
+            expDiv.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const { eq, correct, a, b, c, disc } = questions[i];
+                const user = userAnswers[i];
+                const isCorrect = user === correct;
+                const exp = `Para a equação \\(${eq}\\), o discriminante é \\(\\Delta = b^2 - 4ac = ${b}^2 - 4 \\cdot ${a} \\cdot ${c} = ${disc}\\). As raízes são calculadas pela fórmula de Bhaskara: \\(x = \\frac{-b \\pm \\sqrt{\\Delta}}{2a}\\). Substituindo: \\(x = \\frac{-(${b}) \\pm \\sqrt{${disc}}}{2 \\cdot ${a}}\\). Raízes corretas: \\(${correct}\\). Sua resposta: \\(${user || 'Nenhuma'}\\). (${isCorrect ? 'Correta' : 'Errada'}).`;
+
+                const expItem = document.createElement('div');
+                expItem.className = 'explanation';
+                expItem.innerHTML = `<h4>Questão ${i + 1}</h4><p>${exp}</p>`;
+                expDiv.appendChild(expItem);
+                // Renderizar equações na explicação
+                renderMathInElement(expItem);
+            }
+            expDiv.style.display = 'block';
+        });
+
+        document.getElementById('restart').addEventListener('click', () => {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('explanations').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('submit').style.display = 'block';
+            generateQuiz();
+        });
+    </script>
+</body>
+</html>
